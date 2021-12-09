@@ -8,23 +8,62 @@ class ListaCircular {
 
     }
 
-    addFirst(info){
-
+    addFirst(info) {
+        let nuevo = new Nodo(info);
+        if (this.origen == null) {
+            this.origen = nuevo;
+            this.origen.siguiente = this.origen;
+        } else {
+            let aux = this.origen;
+            while (aux.siguiente != this.origen) {
+                aux = aux.siguiente;
+            }
+            aux.setSiguiente(nuevo);
+            nuevo.setSiguiente(this.origen);
+        }
+        this.origen = nuevo;
+        console.log("origen: " + this.origen)
+        this.tamaño++;
     }
 
-    addLast(info){
-
+    // Pendiente por error
+    addLast(info) {
+          let nuevo = new Nodo(info);
+        if (this.isEmpty()) {
+            this.addFirst(info);
+        } else {
+            let aux = this.origen.siguiente;
+            while (aux.siguiente != this.origen) {
+                aux = aux.siguiente;   
+            }
+            aux.setSiguiente(nuevo);
+            nuevo.setSiguiente(this.origen);
+        }
+        this.tamaño++;
     }
 
     remove(pos) {
 
     }
 
-    removeFirst(){
-
+    removeFirst() {
+        if (this.isEmpty()) {
+            console.log("Lista vacia");
+        } else {
+            let aux = this.origen;
+            while (aux.siguiente != this.origen) {
+                aux = aux.siguiente;
+            }
+            let eliminar = this.origen;
+            this.origen = eliminar.siguiente;
+            eliminar.setSiguiente(null);
+            eliminar = null;
+            aux.setSiguiente(this.origen);
+            this.tamaño--;
+        }
     }
 
-    removeLast(){
+    removeLast() {
 
     }
 
@@ -37,7 +76,7 @@ class ListaCircular {
     }
 
     isEmpty() {
-
+      return this.origen == null;
     }
 
     size() {
@@ -49,6 +88,14 @@ class ListaCircular {
     }
 
     print() {
-        
+        if (this.isEmpty()) {
+            console.log("Lista vacia");
+        } else {
+            let aux = this.origen;
+            do {
+                console.log(aux.info);
+                aux = aux.siguiente;
+            } while (aux != this.origen);
+        }
     }
 }

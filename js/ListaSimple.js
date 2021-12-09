@@ -5,10 +5,24 @@ class ListaSimple {
     }
 
     add(pos, info) {
-        
+        if (pos == 0) {
+            this.addFirst(info);
+        } else if (pos == this.tamaño) {
+            this.addLast(info);
+        } else if (pos > 0 && pos < this.tamaño) {
+            let aux = this.origen;
+            for (let i = 0; i < pos - 1; i++) {
+                aux = aux.siguiente;
+            }
+            let nuevo = new Nodo(info);
+            let actual = aux.siguiente;
+            aux.setSiguiente(nuevo);
+            nuevo.setSiguiente(actual);
+            this.tamaño++;
+        }
     }
 
-    addFirst(info){
+    addFirst(info) {
         let nuevo = new Nodo(info);
         if (this.isEmpty()) {
             this.origen = nuevo;
@@ -20,7 +34,7 @@ class ListaSimple {
         this.tamaño++;
     }
 
-    addLast(info){
+    addLast(info) {
         let nuevo = new Nodo(info);
         if (this.isEmpty()) {
             this.origen = nuevo;
@@ -35,10 +49,21 @@ class ListaSimple {
     }
 
     remove(pos) {
-
+        if (pos == 0) {
+            this.removeFirst();
+        } else if (pos == this.tamaño - 1) {
+            this.removeLast();
+        } else if (pos > 0 && pos < (this.tamaño - 1)) {
+                let aux = this.origen;
+            for (let i = 0; i < pos - 1; i++) {
+                aux = aux.siguiente;
+            }
+            aux.setSiguiente(aux.siguiente.siguiente);
+            this.tamaño--;
+        }
     }
 
-    removeFirst(){
+    removeFirst() {
         if (!this.isEmpty()) {
             this.origen = this.origen.siguiente;
             this.size--;
@@ -47,7 +72,7 @@ class ListaSimple {
         }
     }
 
-    removeLast(){
+    removeLast() {
         if (!this.isEmpty()) {
             if (this.tamaño == 1) {
                 origen = null;
