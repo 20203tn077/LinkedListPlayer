@@ -1,4 +1,10 @@
 var lista = new ListaSimple;
-lista.addFirst("hola");
-lista.addFirst("hola primero");
+console.log("hola");
+throw IndexOutOfBounds;
+console.log("hola");
+lista.addFirst("3");
+lista.addFirst("2");
+lista.addFirst("1");
+lista.addLast("4");
+lista.addLast("5");
 lista.print();

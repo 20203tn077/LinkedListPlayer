@@ -5,7 +5,7 @@ class ListaSimple {
     }
 
     add(pos, info) {
-
+        
     }
 
     addFirst(info){
@@ -17,7 +17,7 @@ class ListaSimple {
             this.origen = nuevo;
             this.origen.siguiente = temp;
         }
-        this.size++;
+        this.tamaño++;
     }
 
     addLast(info){
@@ -31,7 +31,7 @@ class ListaSimple {
             }
             aux.siguiente = nuevo;
         }
-        this.size++;
+        this.tamaño++;
     }
 
     remove(pos) {
@@ -39,31 +39,65 @@ class ListaSimple {
     }
 
     removeFirst(){
-
+        if (!this.isEmpty()) {
+            this.origen = this.origen.siguiente;
+            this.size--;
+        } else {
+            throw new Error("Lista vacía");
+        }
     }
 
     removeLast(){
-
+        if (!this.isEmpty()) {
+            if (this.tamaño == 1) {
+                origen = null;
+            } else {
+                let aux = this.origen;
+                while (aux.siguiente.siguiente != null) {
+                    aux = aux.siguiente;
+                }
+                aux.siguiente = null;
+            }
+            this.tamaño--;
+        } else {
+            throw new Error("Lista vacía");
+        }
     }
 
     set(pos, info) {
-
+        if (pos > 0 && pos < this.tamaño) {
+            let aux = this.origen;
+            for (let i = 0; i < pos; i++) {
+                aux = aux.siguiente;
+            }
+            aux.info = info;
+        } else {
+            throw new Error("Fuera del rango");
+        }
     }
 
     get(pos) {
-
+        if (pos > 0 && pos < this.tamaño) {
+            let aux = this.origen;
+            for (let i = 0; i < pos; i++) {
+                aux = aux.siguiente;
+            }
+            return aux;
+        } else {
+            throw new Error("Fuera del rango");
+        }
     }
 
     isEmpty() {
-
+        return this.origen == null;
     }
 
     size() {
-
+        return this.tamaño;
     }
 
     iterator() {
-
+        return this.origen;
     }
 
     print() {
