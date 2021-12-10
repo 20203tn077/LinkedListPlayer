@@ -11,7 +11,7 @@ class ListaDoble {
             this.addFirst(info);
         } else if (pos == this.tamaño) {
             this.addLast(info);
-        } else if (pos > 0 && pos < this.length) {
+        } else if (pos > 0 && pos < this.tamaño) {
             let count = 1;
             let aux = this.origen;
             while (count != pos) {

@@ -5,7 +5,21 @@ class ListaCircular {
     }
 
     add(pos, info) {
-
+        let nuevo = new Nodo(info);
+        if (pos == 0) {
+            this.addFirst(info);
+        } else if (pos == this.tamaño) {
+            this.addLast(info);
+        } else if (pos > 0 && pos < this.tamaño) {
+            let aux = this.origen;
+            for (let i = 0; i < pos - 1; i++) {
+                aux = aux.siguiente;
+            }
+            let actual = aux.siguiente;
+            aux.siguiente = nuevo;
+            nuevo.siguiente = actual;
+            this.tamaño++;
+        }
     }
 
     addFirst(info) {
@@ -18,32 +32,46 @@ class ListaCircular {
             while (aux.siguiente != this.origen) {
                 aux = aux.siguiente;
             }
-            aux.setSiguiente(nuevo);
-            nuevo.setSiguiente(this.origen);
+            aux.siguiente = nuevo;
+            nuevo.siguiente = this.origen;
         }
         this.origen = nuevo;
-        console.log("origen: " + this.origen)
         this.tamaño++;
     }
 
-    // Pendiente por error
     addLast(info) {
-          let nuevo = new Nodo(info);
+        let nuevo = new Nodo(info);
         if (this.isEmpty()) {
             this.addFirst(info);
         } else {
             let aux = this.origen.siguiente;
             while (aux.siguiente != this.origen) {
-                aux = aux.siguiente;   
+                aux = aux.siguiente;
             }
-            aux.setSiguiente(nuevo);
-            nuevo.setSiguiente(this.origen);
+            aux.siguiente = nuevo;
+            nuevo.siguiente = this.origen;
+            this.tamaño++;
         }
-        this.tamaño++;
+
     }
 
     remove(pos) {
-
+        if (pos > (this.tamaño - 1)) {
+            console.log("Fuera del rango");
+        } else {
+            if (pos == 0) {
+                this.removeFirst();
+            } else if (pos == this.tamaño - 1) {
+                this.removeLast();
+            } else if (pos > 0 && pos < (this.tamaño - 1)) {
+                let aux = this.origen;
+                for (let i = 0; i < pos - 1; i++) {
+                    aux = aux.siguiente;
+                }
+                aux.siguiente = aux.siguiente.siguiente;
+                this.tamaño--;
+            }
+        }
     }
 
     removeFirst() {
@@ -56,35 +84,73 @@ class ListaCircular {
             }
             let eliminar = this.origen;
             this.origen = eliminar.siguiente;
-            eliminar.setSiguiente(null);
+            eliminar.siguiente = null;
             eliminar = null;
-            aux.setSiguiente(this.origen);
+            aux.siguiente = this.origen;
             this.tamaño--;
         }
     }
 
     removeLast() {
-
+        if (this.isEmpty()) {
+            console.log("Lista vacia");
+        } else {
+            let aux = this.origen.siguiente;
+            while (aux.siguiente.siguiente != this.origen) {
+                aux = aux.siguiente;
+            }
+            let eliminar = aux.siguiente;
+            aux.siguiente = this.origen;
+            eliminar.siguiente = null;
+            eliminar = null;
+            this.tamaño--;
+        }
     }
 
     set(pos, info) {
-
+        if (pos > (this.tamaño - 1)) {
+            console.log("Fuera del rango");
+        } else {
+            if (pos == 0) {
+                this.origen.info = info;
+            } else if (pos > 0 && pos <= this.tamaño) {
+                let aux = this.origen;
+                let posicion = 0;
+                while (posicion != pos && posicion != (this.tamaño - 1)) {
+                    aux = aux.siguiente;
+                    posicion++;
+                }
+                aux.info = info;
+            }
+        }
     }
 
     get(pos) {
-
+        let consulta = null;
+        if (pos == 0) {
+            consulta = this.origen;
+        } else if (pos > 0 && pos <= this.tamaño) {
+            let aux = this.origen;
+            let posicion = 0;
+            while (posicion != pos && posicion != (this.tamaño - 1)) {
+                aux = aux.siguiente;
+                posicion++;
+            }
+            consulta = aux;
+        }
+        return consulta;
     }
 
     isEmpty() {
-      return this.origen == null;
+        return this.origen == null;
     }
 
     size() {
-
+        return this.tamaño;
     }
 
     iterator() {
-
+        return this.origen;
     }
 
     print() {
