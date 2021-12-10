@@ -56,8 +56,8 @@ class ListaCircular {
     }
 
     remove(pos) {
-        if (pos > (this.tamaño - 1)) {
-            console.log("Fuera del rango");
+        if (pos > (this.tamaño - 1) &&  0 < pos) {
+            throw new Error("Fuera del rango");
         } else {
             if (pos == 0) {
                 this.removeFirst();
@@ -76,7 +76,7 @@ class ListaCircular {
 
     removeFirst() {
         if (this.isEmpty()) {
-            console.log("Lista vacia");
+            throw new Error("Lista vacia");
         } else {
             let aux = this.origen;
             while (aux.siguiente != this.origen) {
@@ -93,7 +93,7 @@ class ListaCircular {
 
     removeLast() {
         if (this.isEmpty()) {
-            console.log("Lista vacia");
+            throw new Error("Lista vacia");
         } else {
             let aux = this.origen.siguiente;
             while (aux.siguiente.siguiente != this.origen) {
@@ -108,8 +108,8 @@ class ListaCircular {
     }
 
     set(pos, info) {
-        if (pos > (this.tamaño - 1)) {
-            console.log("Fuera del rango");
+        if (pos > (this.tamaño - 1) && 0 < pos) {
+            throw new Error("Fuera del rango");
         } else {
             if (pos == 0) {
                 this.origen.info = info;

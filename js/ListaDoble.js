@@ -76,7 +76,7 @@ class ListaDoble {
 
     removeFirst(){
         if (this.isEmpty()) {
-            console.log("Lista vacia");
+            throw new Error("Lista vacia");
         } else {
             if (this.tamaño == 1) {
                 this.removeFirst();
@@ -93,7 +93,7 @@ class ListaDoble {
 
     removeLast(){
         if (this.isEmpty()) {
-            console.log("Lista vacía");
+            throw new Error("Lista vacia");
         } else {
             if (this.tamaño == 1) {
                 this.removeFirst();
@@ -110,7 +110,7 @@ class ListaDoble {
     set(pos, info) {
         let nuevo = new Nodo(info);
         if (this.isEmpty()) {
-            console.log("Lista Vacia");
+            throw new Error("Lista vacia");
         } else {
             if (pos == 0) {
                 let aux = this.origen;
