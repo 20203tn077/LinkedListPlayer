@@ -6,28 +6,32 @@ class ListaDoble {
     }
 
     add(pos, info) {
-        let nuevo = new Nodo(info);
-        if (pos == 0) {
-            this.addFirst(info);
-        } else if (pos == this.tamaño) {
-            this.addLast(info);
-        } else if (pos > 0 && pos < this.tamaño) {
-            let count = 1;
-            let aux = this.origen;
-            while (count != pos) {
-                aux = aux.siguiente;
-                count++;
+        if (pos > (this.tamaño - 1) || pos < 0) {
+            throw new Error("Fuera del rango");
+        } else {
+            if (pos == 0) {
+                this.addFirst(info);
+            } else if (pos == this.tamaño) {
+                this.addLast(info);
+            } else if (pos > 0 && pos < this.tamaño) {
+                let nuevo = new Nodo(info);
+                let count = 1;
+                let aux = this.origen;
+                while (count != pos) {
+                    aux = aux.siguiente;
+                    count++;
+                }
+                let despues = aux.siguiente;
+                aux.siguiente = nuevo;
+                nuevo.siguiente = despues;
+                nuevo.anterior = aux;
+                despues.siguiente = nuevo;
+                this.tamaño++;
             }
-            let despues = aux.siguiente;
-            aux.siguiente = nuevo;
-            nuevo.siguiente = despues;
-            nuevo.anterior = aux;
-            despues.siguiente = nuevo;
-            this.tamaño++;
         }
     }
 
-    addFirst(info){
+    addFirst(info) {
         let nuevo = new Nodo(info);
         if (this.tamaño == 0) {
             this.origen = nuevo;
@@ -41,7 +45,7 @@ class ListaDoble {
         this.tamaño++;
     }
 
-    addLast(info){
+    addLast(info) {
         let nuevo = new Nodo(info);
         if (this.tamaño == 0) {
             this.origen = nuevo;
@@ -56,32 +60,36 @@ class ListaDoble {
     }
 
     remove(pos) {
-        if (pos == 0) {
-            this.removeFirst();
-        } else if (pos == this.tamaño - 1) {
-            this.removeLast();
-        } else if (pos > 0 && pos < this.tamaño) {
-            let aux = this.origen;
-            let count = 0;
-            while (count != pos) {
-                aux = aux.siguiente;
-                count++;
+        if (pos > (this.tamaño - 1) || pos < 0) {
+            throw new Error("Fuera del rango");
+        } else {
+            if (pos == 0) {
+                this.removeFirst();
+            } else if (pos == this.tamaño - 1) {
+                this.removeLast();
+            } else if (pos > 0 && pos < this.tamaño) {
+                let aux = this.origen;
+                let count = 0;
+                while (count != pos) {
+                    aux = aux.siguiente;
+                    count++;
+                }
+                aux.anterior.siguiente = aux.siguiente;
+                aux.siguiente.anterior = aux.anterior;
+                aux = null;
+                this.tamaño--;
             }
-            aux.anterior.siguiente = aux.siguiente;
-            aux.siguiente.anterior = aux.anterior;
-            aux = null;
-            this.tamaño--;
         }
     }
 
-    removeFirst(){
+    removeFirst() {
         if (this.isEmpty()) {
             throw new Error("Lista vacia");
         } else {
             if (this.tamaño == 1) {
                 this.removeFirst();
             } else {
-                
+
                 let aux = this.origen;
                 this.origen = aux.siguiente;
                 aux.siguiente = null;
@@ -91,7 +99,7 @@ class ListaDoble {
         }
     }
 
-    removeLast(){
+    removeLast() {
         if (this.isEmpty()) {
             throw new Error("Lista vacia");
         } else {
@@ -108,50 +116,58 @@ class ListaDoble {
     }
 
     set(pos, info) {
-        let nuevo = new Nodo(info);
-        if (this.isEmpty()) {
-            throw new Error("Lista vacia");
+        if (pos > (this.tamaño - 1) || pos < 0) {
+            throw new Error("Fuera del rango");
         } else {
-            if (pos == 0) {
-                let aux = this.origen;
-                nuevo.siguiente = aux.siguiente;
-                this.origen = nuevo;
-                aux.siguiente = null;
-                aux = null;
-            } else if (pos > 0 && pos < this.tamaño) {
-                let aux = this.origen;
-                let count = 0;
-                while (count != pos) {
-                    aux = aux.siguiente;
-                    count++;
+            let nuevo = new Nodo(info);
+            if (this.isEmpty()) {
+                throw new Error("Lista vacia");
+            } else {
+                if (pos == 0) {
+                    let aux = this.origen;
+                    nuevo.siguiente = aux.siguiente;
+                    this.origen = nuevo;
+                    aux.siguiente = null;
+                    aux = null;
+                } else if (pos > 0 && pos < this.tamaño) {
+                    let aux = this.origen;
+                    let count = 0;
+                    while (count != pos) {
+                        aux = aux.siguiente;
+                        count++;
+                    }
+                    nuevo.anterior = aux.anterior;
+                    nuevo.siguiente = aux.siguiente;
+                    aux.anterior.siguiente = nuevo;
+                    if (aux.siguiente != null) {
+                        aux.siguiente.anterior = nuevo;
+                    }
+                    aux.anterior = null;
+                    aux.siguiente = null;
+                    aux = null;
                 }
-                nuevo.anterior = aux.anterior;
-                nuevo.siguiente = aux.siguiente;
-                aux.anterior.siguiente  = nuevo;
-                if (aux.siguiente != null) {
-                    aux.siguiente.anterior = nuevo;
-                }
-                aux.anterior = null;
-                aux.siguiente = null;
-                aux = null;
             }
         }
     }
 
     get(pos) {
-        let consulta = null;
-        if (pos == 0) {
-            consulta = this.origen;
-        } else if (pos > 0 && pos <= this.tamaño) {
-            let aux = this.origen;
-            let posicion = 0;
-            while (posicion != pos) {
-                aux = aux.siguiente;
-                posicion++;
+        if (pos > (this.tamaño - 1) || pos < 0) {
+            throw new Error("Fuera del rango");
+        } else {
+            let consulta = null;
+            if (pos == 0) {
+                consulta = this.origen;
+            } else if (pos > 0 && pos <= this.tamaño) {
+                let aux = this.origen;
+                let posicion = 0;
+                while (posicion != pos) {
+                    aux = aux.siguiente;
+                    posicion++;
+                }
+                consulta = aux;
             }
-            consulta = aux;
+            return consulta;
         }
-        return consulta;
     }
 
     isEmpty() {

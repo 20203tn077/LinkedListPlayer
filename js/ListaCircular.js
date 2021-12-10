@@ -5,20 +5,24 @@ class ListaCircular {
     }
 
     add(pos, info) {
-        let nuevo = new Nodo(info);
-        if (pos == 0) {
-            this.addFirst(info);
-        } else if (pos == this.tamaño) {
-            this.addLast(info);
-        } else if (pos > 0 && pos < this.tamaño) {
-            let aux = this.origen;
-            for (let i = 0; i < pos - 1; i++) {
-                aux = aux.siguiente;
+        if (pos > (this.tamaño - 1) || pos < 0) {
+            throw new Error("Fuera del rango");
+        } else {
+            if (pos == 0) {
+                this.addFirst(info);
+            } else if (pos == this.tamaño) {
+                this.addLast(info);
+            } else if (pos > 0 && pos < this.tamaño) {
+                let nuevo = new Nodo(info);
+                let aux = this.origen;
+                for (let i = 0; i < pos - 1; i++) {
+                    aux = aux.siguiente;
+                }
+                let actual = aux.siguiente;
+                aux.siguiente = nuevo;
+                nuevo.siguiente = actual;
+                this.tamaño++;
             }
-            let actual = aux.siguiente;
-            aux.siguiente = nuevo;
-            nuevo.siguiente = actual;
-            this.tamaño++;
         }
     }
 
@@ -56,20 +60,24 @@ class ListaCircular {
     }
 
     remove(pos) {
-        if (pos > (this.tamaño - 1) ||  pos < 0) {
+        if (pos > (this.tamaño - 1) || pos < 0) {
             throw new Error("Fuera del rango");
         } else {
-            if (pos == 0) {
-                this.removeFirst();
-            } else if (pos == this.tamaño - 1) {
-                this.removeLast();
-            } else if (pos > 0 && pos < (this.tamaño - 1)) {
-                let aux = this.origen;
-                for (let i = 0; i < pos - 1; i++) {
-                    aux = aux.siguiente;
+            if (pos > (this.tamaño - 1) || pos < 0) {
+                throw new Error("Fuera del rango");
+            } else {
+                if (pos == 0) {
+                    this.removeFirst();
+                } else if (pos == this.tamaño - 1) {
+                    this.removeLast();
+                } else if (pos > 0 && pos < (this.tamaño - 1)) {
+                    let aux = this.origen;
+                    for (let i = 0; i < pos - 1; i++) {
+                        aux = aux.siguiente;
+                    }
+                    aux.siguiente = aux.siguiente.siguiente;
+                    this.tamaño--;
                 }
-                aux.siguiente = aux.siguiente.siguiente;
-                this.tamaño--;
             }
         }
     }
@@ -108,11 +116,34 @@ class ListaCircular {
     }
 
     set(pos, info) {
-        if (pos > (this.tamaño - 1) ||  pos < 0) {
+        if (pos > (this.tamaño - 1) || pos < 0) {
             throw new Error("Fuera del rango");
         } else {
+            if (pos > (this.tamaño - 1) || pos < 0) {
+                throw new Error("Fuera del rango");
+            } else {
+                if (pos == 0) {
+                    this.origen.info = info;
+                } else if (pos > 0 && pos <= this.tamaño) {
+                    let aux = this.origen;
+                    let posicion = 0;
+                    while (posicion != pos && posicion != (this.tamaño - 1)) {
+                        aux = aux.siguiente;
+                        posicion++;
+                    }
+                    aux.info = info;
+                }
+            }
+        }
+    }
+
+    get(pos) {
+        if (pos > (this.tamaño - 1) || pos < 0) {
+            throw new Error("Fuera del rango");
+        } else {
+            let consulta = null;
             if (pos == 0) {
-                this.origen.info = info;
+                consulta = this.origen;
             } else if (pos > 0 && pos <= this.tamaño) {
                 let aux = this.origen;
                 let posicion = 0;
@@ -120,25 +151,10 @@ class ListaCircular {
                     aux = aux.siguiente;
                     posicion++;
                 }
-                aux.info = info;
+                consulta = aux;
             }
+            return consulta;
         }
-    }
-
-    get(pos) {
-        let consulta = null;
-        if (pos == 0) {
-            consulta = this.origen;
-        } else if (pos > 0 && pos <= this.tamaño) {
-            let aux = this.origen;
-            let posicion = 0;
-            while (posicion != pos && posicion != (this.tamaño - 1)) {
-                aux = aux.siguiente;
-                posicion++;
-            }
-            consulta = aux;
-        }
-        return consulta;
     }
 
     isEmpty() {
