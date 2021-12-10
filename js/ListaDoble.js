@@ -13,29 +13,29 @@ class ListaDoble {
             this.addLast(info);
         } else if (pos > 0 && pos < this.length) {
             let count = 1;
-            let aux = this.iteratorFirst();
+            let aux = this.origen;
             while (count != pos) {
                 aux = aux.siguiente;
                 count++;
             }
             let despues = aux.siguiente;
-            aux.setSiguiente(nuevo);
-            nuevo.setSiguiente(despues);
-            nuevo.setAnterior(aux);
-            despues.setAnterior(nuevo);
+            aux.siguiente = nuevo;
+            nuevo.siguiente = despues;
+            nuevo.anterior = aux;
+            despues.siguiente = nuevo;
             this.tamaño++;
         }
     }
 
     addFirst(info){
         let nuevo = new Nodo(info);
-        if (this.size() == 0) {
+        if (this.tamaño == 0) {
             this.origen = nuevo;
             this.final = nuevo;
         } else {
             let aux = this.origen;
-            aux.setAnterior(nuevo);
-            nuevo.setSiguiente(aux);
+            aux.anterior = nuevo;
+            nuevo.siguiente = aux;
             this.origen = nuevo;
         }
         this.tamaño++;
@@ -48,8 +48,8 @@ class ListaDoble {
             this.final = nuevo;
         } else {
             let aux = this.origen;
-            aux.setSiguiente(nuevo);
-            nuevo.setAnterior(aux);
+            aux.siguiente = nuevo;
+            nuevo.anterior = aux;
             this.final = nuevo;
         }
         this.tamaño++;
@@ -67,8 +67,8 @@ class ListaDoble {
                 aux = aux.siguiente;
                 count++;
             }
-            aux.anterior.setSiguiente(aux.siguiente);
-            aux.siguiente.setAnterior(aux.anterior);
+            aux.anterior.siguiente = aux.siguiente;
+            aux.siguiente.anterior = aux.anterior;
             aux = null;
             this.tamaño--;
         }
@@ -84,7 +84,7 @@ class ListaDoble {
                 
                 let aux = this.origen;
                 this.origen = aux.siguiente;
-                aux.setSiguiente(null);
+                aux.siguiente = null;
                 aux = null;
             }
             this.tamaño--;
@@ -100,7 +100,7 @@ class ListaDoble {
             } else {
                 let aux = this.final;
                 this.final = aux.anterior;
-                this.final.setSiguiente(null);
+                this.final.siguiente = null;
                 aux = null;
                 this.tamaño--;
             }
@@ -114,9 +114,9 @@ class ListaDoble {
         } else {
             if (pos == 0) {
                 let aux = this.origen;
-                nuevo.setSiguiente(aux.siguiente);
+                nuevo.siguiente = aux.siguiente;
                 this.origen = nuevo;
-                aux.setSiguiente(null);
+                aux.siguiente = null;
                 aux = null;
             } else if (pos > 0 && pos < this.tamaño) {
                 let aux = this.origen;
@@ -125,14 +125,14 @@ class ListaDoble {
                     aux = aux.siguiente;
                     count++;
                 }
-                nuevo.setAnterior(aux.anterior);
-                nuevo.setSiguiente(aux.siguiente);
-                aux.anterior.setSiguiente(nuevo);
+                nuevo.anterior = aux.anterior;
+                nuevo.siguiente = aux.siguiente;
+                aux.anterior.siguiente  = nuevo;
                 if (aux.siguiente != null) {
-                    aux.siguiente.setAnterior(nuevo);
+                    aux.siguiente.anterior = nuevo;
                 }
-                aux.setAnterior(null);
-                aux.setSiguiente(null);
+                aux.anterior = null;
+                aux.siguiente = null;
                 aux = null;
             }
         }

@@ -16,8 +16,8 @@ class ListaSimple {
             }
             let nuevo = new Nodo(info);
             let actual = aux.siguiente;
-            aux.setSiguiente(nuevo);
-            nuevo.setSiguiente(actual);
+            aux.siguiente = nuevo;
+            nuevo.siguiente = actual;
             this.tamaño++;
         }
     }
@@ -58,7 +58,7 @@ class ListaSimple {
             for (let i = 0; i < pos - 1; i++) {
                 aux = aux.siguiente;
             }
-            aux.setSiguiente(aux.siguiente.siguiente);
+            aux.siguiente  = aux.siguiente.siguiente;
             this.tamaño--;
         }
     }
@@ -66,7 +66,7 @@ class ListaSimple {
     removeFirst() {
         if (!this.isEmpty()) {
             this.origen = this.origen.siguiente;
-            this.size--;
+            this.tamaño--;
         } else {
             throw new Error("Lista vacía");
         }
