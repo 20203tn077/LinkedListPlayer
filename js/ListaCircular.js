@@ -56,7 +56,7 @@ class ListaCircular {
     }
 
     remove(pos) {
-        if (pos > (this.tamaño - 1) &&  0 < pos) {
+        if (pos > (this.tamaño - 1) ||  pos < 0) {
             throw new Error("Fuera del rango");
         } else {
             if (pos == 0) {
@@ -108,7 +108,7 @@ class ListaCircular {
     }
 
     set(pos, info) {
-        if (pos > (this.tamaño - 1) && 0 < pos) {
+        if (pos > (this.tamaño - 1) ||  pos < 0) {
             throw new Error("Fuera del rango");
         } else {
             if (pos == 0) {
