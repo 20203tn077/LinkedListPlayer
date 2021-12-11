@@ -5,24 +5,22 @@ class ListaSimple {
     }
 
     add(pos, info) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
-        } else {
-            if (pos == 0) {
-                this.addFirst(info);
-            } else if (pos == this.tamaño) {
-                this.addLast(info);
-            } else if (pos > 0 && pos < this.tamaño) {
-                let aux = this.origen;
-                for (let i = 0; i < pos - 1; i++) {
-                    aux = aux.siguiente;
-                }
-                let nuevo = new Nodo(info);
-                let actual = aux.siguiente;
-                aux.siguiente = nuevo;
-                nuevo.siguiente = actual;
-                this.tamaño++;
+        if (pos == 0) {
+            this.addFirst(info);
+        } else if (pos == this.tamaño) {
+            this.addLast(info);
+        } else if (pos > 0 && pos < this.tamaño) {
+            let aux = this.origen;
+            for (let i = 0; i < pos - 1; i++) {
+                aux = aux.siguiente;
             }
+            let nuevo = new Nodo(info);
+            let actual = aux.siguiente;
+            aux.siguiente = nuevo;
+            nuevo.siguiente = actual;
+            this.tamaño++;
+        } else {
+            throw new Error("Fuera del rango");
         }
     }
 
@@ -83,7 +81,7 @@ class ListaSimple {
     removeLast() {
         if (!this.isEmpty()) {
             if (this.tamaño == 1) {
-                origen = null;
+                this.origen = null;
             } else {
                 let aux = this.origen;
                 while (aux.siguiente.siguiente != null) {
