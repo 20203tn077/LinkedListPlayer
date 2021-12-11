@@ -114,15 +114,15 @@ class ListaSimple {
     }
 
     get(pos) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
+        if (this.isEmpty()) {
+            throw new Error("Lista vacía");
         } else {
-            if (pos > 0 && pos < this.tamaño) {
+            if (pos >= 0 && pos < this.tamaño) {
                 let aux = this.origen;
                 for (let i = 0; i < pos; i++) {
                     aux = aux.siguiente;
                 }
-                return aux;
+                return aux.info;
             } else {
                 throw new Error("Fuera del rango");
             }

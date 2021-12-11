@@ -1,6 +1,7 @@
 class Cancion {
     constructor(url) {
         this.codigo = url.replace("https://", "").replace("http://", "").replace("www.", "").replace("youtube.com/watch?v=", "").replace("youtu.be/", "").split("&")[0].split("?")[0];
+        this.Reproduciendo = false;
 
         let info;
         let req = new XMLHttpRequest();
