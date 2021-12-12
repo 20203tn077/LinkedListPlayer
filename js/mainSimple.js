@@ -8,7 +8,7 @@ var modalPrimeraCancion_btnAgregar = document.getElementById('modalPrimeraCancio
 // Reproductor
 var tag = document.createElement('script');
 
-tag.src = "https://www.youtube.com/iframe_api";
+tag.src = 'https://www.youtube.com/iframe_api';
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
@@ -67,13 +67,20 @@ var modalRemoveFirst_btnEliminar = document.getElementById('modalRemoveFirst_btn
 var modalRemoveLast = new bootstrap.Modal(document.getElementById('modalRemoveLast'), {});
 var modalRemoveLast_btnEliminar = document.getElementById('modalRemoveLast_btnEliminar');
 
+// Modal establecer en posición
+var modalSet = new bootstrap.Modal(document.getElementById('modalSet'), {});
+var modalSet_txtPosicion = document.getElementById('modalSet_txtPosicion');
+var modalSet_txtEnlace = document.getElementById('modalSet_txtEnlace');
+var modalSet_btnEstablecer = document.getElementById('modalSet_btnEstablecer');
+
 // Opciones de la lista
-var btnAdd = document.getElementById("btnAdd");
-var btnAddFirst = document.getElementById("btnAddFirst");
-var btnAddLast = document.getElementById("btnAddLast");
-var btnRemove = document.getElementById("btnRemove");
-var btnRemoveFirst = document.getElementById("btnRemoveFirst");
-var btnRemoveLast = document.getElementById("btnRemoveLast");
+var btnAdd = document.getElementById('btnAdd');
+var btnAddFirst = document.getElementById('btnAddFirst');
+var btnAddLast = document.getElementById('btnAddLast');
+var btnRemove = document.getElementById('btnRemove');
+var btnRemoveFirst = document.getElementById('btnRemoveFirst');
+var btnRemoveLast = document.getElementById('btnRemoveLast');
+var btnSet = document.getElementById('btnSet');
 
 // Toast para erroes
 var toastError = new bootstrap.Toast(document.getElementById('toastError'));
@@ -85,7 +92,7 @@ var txtError = document.getElementById('txtError');
 function actualizar() {
 
     //Dibujar lista en pantalla
-    let contenido = "";
+    let contenido = lista.isEmpty() ? '<tr><td class="text-center">Lista vacía</td></tr>' : '';
     let count = 0;
     for (let i = lista.iterator(); i != null; i = i.siguiente) {
         let cancion = i.info;
@@ -103,7 +110,7 @@ function actualizar() {
         btnRemoveFirst.disabled = true;
         btnRemoveLast.disabled = true;
 
-        icoReproducir.href.baseVal = "../ico/feather-sprite.svg#play";
+        icoReproducir.href.baseVal = '../ico/feather-sprite.svg#play';
         btnReproducir.disabled = true;
     } else {
         btnRemove.disabled = false;
@@ -126,7 +133,7 @@ function actualizar() {
                 listaTerminada = false;
             }
 
-            icoReproducir.href.baseVal = "../ico/feather-sprite.svg#play";
+            icoReproducir.href.baseVal = '../ico/feather-sprite.svg#play';
             btnReproducir.disabled = true;
         } else {
             btnReproducir.disabled = false;
@@ -140,15 +147,26 @@ function mostrarError(mensaje) {
     toastError.show();
 }
 
+// Obtiene el nodo en cierta posición
+function nodo(posicion) {
+    if (posicion < 0) throw new Error('Fuera del rango');
+    try {
+        let aux = lista.iterator();
+        for (let i = 0; i < posicion; i++) aux = aux.siguiente;
+        return aux;
+    } catch (error) {
+        throw new Error('Fuera del rango');
+    }
+}
+
 // Reproduce una canción de la lista según la posición
 function reproducir(posicion) {
     try {
         let cancion = lista.get(posicion);
         reproductor.loadVideoById(cancion.codigo);
         reproductor.playVideo();
-        let aux = lista.iterator();
-        for (let i = 0; i < posicion; i++) aux = aux.siguiente;
-        nodoCancionActual = aux;
+        nodoCancionActual = nodo(posicion);
+        if (listaTerminada) listaTerminada = false;
         actualizar();
     } catch (error) {
         mostrarError(error.message);
@@ -163,6 +181,7 @@ function reproducirSiguiente() {
         reproductor.loadVideoById(cancion.codigo);
         reproductor.playVideo();
     } else {
+        reproductor.stopVideo();
         listaTerminada = true;
     }
     actualizar();
@@ -177,10 +196,10 @@ function onStateChange(event) {
             reproducirSiguiente();
             break;
         case 1:
-            icoReproducir.href.baseVal = "../ico/feather-sprite.svg#pause";
+            icoReproducir.href.baseVal = '../ico/feather-sprite.svg#pause';
             break;
         case 2:
-            icoReproducir.href.baseVal = "../ico/feather-sprite.svg#play";
+            icoReproducir.href.baseVal = '../ico/feather-sprite.svg#play';
     }
 }
 
@@ -189,14 +208,14 @@ function onError(event) {
     switch (event.data) {
         case 101:
         case 150:
-            mostrarError("El propietario del video no permite reproducirlo fuera de Youtube");
+            mostrarError('El propietario del video no permite reproducirlo fuera de Youtube');
             reproducirSiguiente();
     }
 }
 
 // Modal primera canción
 modalPrimeraCancion_txtEnlace.oninput = () => {
-    modalPrimeraCancion_btnAgregar.disabled = modalPrimeraCancion_txtEnlace.value == "";
+    modalPrimeraCancion_btnAgregar.disabled = modalPrimeraCancion_txtEnlace.value == '';
 }
 
 modalPrimeraCancion_btnAgregar.onclick = () => {
@@ -230,7 +249,7 @@ btnSiguiente.onclick = reproducirSiguiente;
 
 // Modal agregar con posición
 function validarModalAdd() {
-    modalAdd_btnAgregar.disabled = modalAdd_txtEnlace.value == "" || modalAdd_txtPosicion.value == "";
+    modalAdd_btnAgregar.disabled = modalAdd_txtEnlace.value == '' || modalAdd_txtPosicion.value == '';
 }
 modalAdd_txtPosicion.oninput = validarModalAdd;
 modalAdd_txtEnlace.oninput = validarModalAdd;
@@ -239,101 +258,131 @@ modalAdd_btnAgregar.onclick = () => {
     try {
         lista.add(modalAdd_txtPosicion.value - 1, new Cancion(modalAdd_txtEnlace.value));
         actualizar();
+        modalAdd.hide();
     } catch (error) {
         mostrarError(error.message);
     }
-    modalAdd.hide();
 }
 
 // Modal agregar al inicio
 modalAddFirst_txtEnlace.oninput = () => {
-    modalAddFirst_btnAgregar.disabled = modalAddFirst_txtEnlace.value == "";
+    modalAddFirst_btnAgregar.disabled = modalAddFirst_txtEnlace.value == '';
 }
 
 modalAddFirst_btnAgregar.onclick = () => {
     try {
         lista.addFirst(new Cancion(modalAddFirst_txtEnlace.value));
         actualizar();
+        modalAddFirst.hide();
     } catch (error) {
         mostrarError(error.message);
     }
-    modalAddFirst.hide();
 }
 
 // Modal agregar al final
 modalAddLast_txtEnlace.oninput = () => {
-    modalAddLast_btnAgregar.disabled = modalAddLast_txtEnlace.value == "";
+    modalAddLast_btnAgregar.disabled = modalAddLast_txtEnlace.value == '';
 }
 
 modalAddLast_btnAgregar.onclick = () => {
     try {
         lista.addLast(new Cancion(modalAddLast_txtEnlace.value));
         actualizar();
+        modalAddLast.hide();
     } catch (error) {
         mostrarError(error.message);
     }
-    modalAddLast.hide();
 }
 
 // Modal eliminar con posición
 modalRemove_txtPosicion.oninput = () => {
-    modalRemove_btnEliminar.disabled = modalRemove_txtPosicion.value == "";
+    modalRemove_btnEliminar.disabled = modalRemove_txtPosicion.value == '';
 }
 
 modalRemove_btnEliminar.onclick = () => {
     try {
+        if (nodoCancionActual == nodo(modalRemove_txtPosicion.value - 1)) {
+            reproducirSiguiente();
+        }
         lista.remove(modalRemove_txtPosicion.value - 1);
         actualizar();
+        modalRemove.hide();
     } catch (error) {
         mostrarError(error.message);
     }
-    modalRemove.hide();
 }
 
 // Modal eliminar al inicio
 modalRemoveFirst_btnEliminar.onclick = () => {
     try {
+        if (nodoCancionActual == nodo(0)) {
+            reproducirSiguiente();
+        }
         lista.removeFirst();
         actualizar();
+        modalRemoveFirst.hide();
     } catch (error) {
         mostrarError(error.message);
     }
-    modalRemoveFirst.hide();
 }
 
 // Modal eliminar al final
 modalRemoveLast_btnEliminar.onclick = () => {
     try {
+        if (nodoCancionActual == nodo(lista.size() - 1)) {
+            reproducirSiguiente();
+        }
         lista.removeLast();
         actualizar();
+        modalRemoveLast.hide();
     } catch (error) {
         mostrarError(error.message);
     }
-    modalRemoveLast.hide();
+}
+
+// Modal establecer en posición
+function validarModalSet() {
+    modalSet_btnEstablecer.disabled = modalSet_txtEnlace.value == '' || modalSet_txtPosicion.value == '';
+}
+modalSet_txtPosicion.oninput = validarModalSet;
+modalSet_txtEnlace.oninput = validarModalSet;
+
+modalSet_btnEstablecer.onclick = () => {
+    try {
+        lista.set(modalSet_txtPosicion.value - 1, new Cancion(modalSet_txtEnlace.value));
+        actualizar();
+        if (nodoCancionActual == nodo(modalSet_txtPosicion.value - 1)) {
+            reproducir(modalSet_txtPosicion.value - 1)
+            reproductor.playVideo();
+        }
+        modalSet.hide();
+    } catch (error) {
+        mostrarError(error.message);
+    }
 }
 
 // Opciones de la lista
 btnAdd.onclick = () => {
-    modalAdd_txtPosicion.value = "";
-    modalAdd_txtEnlace.value = "";
+    modalAdd_txtPosicion.value = '';
+    modalAdd_txtEnlace.value = '';
     modalAdd_btnAgregar.disabled = true;
     modalAdd.show();
 }
 
 btnAddFirst.onclick = () => {
-    modalAddFirst_txtEnlace.value = "";
+    modalAddFirst_txtEnlace.value = '';
     modalAddFirst_btnAgregar.disabled = true;
     modalAddFirst.show();
 }
 
 btnAddLast.onclick = () => {
-    modalAddLast_txtEnlace.value = "";
+    modalAddLast_txtEnlace.value = '';
     modalAddLast_btnAgregar.disabled = true;
     modalAddLast.show();
 }
 
 btnRemove.onclick = () => {
-    modalRemove_txtPosicion.value = "";
+    modalRemove_txtPosicion.value = '';
     modalRemove_btnEliminar.disabled = true;
     modalRemove.show();
 }
@@ -344,6 +393,13 @@ btnRemoveFirst.onclick = () => {
 
 btnRemoveLast.onclick = () => {
     modalRemoveLast.show();
+}
+
+btnSet.onclick = () => {
+    modalSet_txtPosicion.value = '';
+    modalSet_txtEnlace.value = '';
+    modalSet_btnEstablecer.disabled = true;
+    modalSet.show();
 }
 
 //INICIO

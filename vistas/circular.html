@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="../css/util.css" rel="stylesheet">
+        <title>Reproductor de Música!</title>
+</head>
+
+<body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                        <a class="navbar-brand me-5" href="../index.html">REPRODUCTOR CON LISTA ENLAZADA</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                                <div class="navbar-nav">
+                                        <a class="nav-link" href="./simple.html">Lista enlazada simple</a>
+                                        <a class="nav-link" href="./doble.html">Lista doblemente enlazada</a>
+                                        <a class="nav-link active" href="#">Lista enlazada circular</a>
+                                </div>
+                        </div>
+                </div>
+        </nav>
+        <div class="container mt-5">
+                <div class="row">
+                        <div class="col-3">
+                                <div class="d-grid gap-3">
+                                        <div class="ratio ratio-16x9">
+                                                <div id="reproductor"></div>
+                                        </div>
+                                        <div class="btn-group d-flex">
+                                                <button class="btn btn-dark flex-fill border-dark" id="btnAnterior"
+                                                        disabled>
+                                                        <svg class="feather">
+                                                                <use href="../ico/feather-sprite.svg#skip-back" />
+                                                        </svg>
+                                                </button>
+                                                <button class="btn btn-dark flex-fill border-dark" id="btnReproducir">
+                                                        <svg class="feather">
+                                                                <use href="../ico/feather-sprite.svg#play"
+                                                                        id="icoReproducir" />
+                                                        </svg>
+                                                </button>
+                                                <button class="btn btn-dark flex-fill border-dark" id="btnSiguiente">
+                                                        <svg class="feather">
+                                                                <use href="../ico/feather-sprite.svg#skip-forward" />
+                                                        </svg>
+                                                </button>
+                                        </div>
+                                        <div class="btn-group-vertical">
+                                                <button id="btnAdd" class="btn btn-dark border-dark">Agregar con
+                                                        posición</button>
+                                                <button id="btnAddFirst" class="btn btn-dark border-dark">Agregar al
+                                                        inicio</button>
+                                                <button id="btnAddLast" class="btn btn-dark border-dark">Agregar al
+                                                        final</button>
+                                                <button id="btnRemove" class="btn btn-dark border-dark">Eliminar con
+                                                        posición</button>
+                                                <button id="btnRemoveFirst" class="btn btn-dark border-dark">Eliminar al
+                                                        inicio</button>
+                                                <button id="btnRemoveLast" class="btn btn-dark border-dark">Eliminar al
+                                                        final</button>
+                                                <button id="btnSet" class="btn btn-dark border-dark">Establecer
+                                                        en posición</button>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="col-9">
+                                <table class="table table-striped table-hover table-dark border-dark">
+                                        <tbody id="contenedorCanciones">
+
+                                        </tbody>
+                                </table>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Modal agregar primera canción -->
+        <div class="modal fade" id="modalPrimeraCancion" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Añadir canción</h5>
+                                </div>
+                                <div class="modal-body">
+                                        Ingresa un enlace de youtube para agregar la primera canción a la lista:
+                                        <input type="text" id="modalPrimeraCancion_txtEnlace" class="form-control"
+                                                disabled autocomplete="off">
+                                </div>
+                                <div class="modal-footer">
+                                        <button id="modalPrimeraCancion_btnAgregar" class="btn btn-dark"
+                                                disabled>Agregar</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Modal agregar con posición -->
+        <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Agregar con posición</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="row">
+                                                <div class="col-3">
+                                                        <label class="label-form">Posición:</label>
+                                                        <input type="number" id="modalAdd_txtPosicion"
+                                                                class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-9">
+                                                        <label class="label-form">Enlace:</label>
+                                                        <input id="modalAdd_txtEnlace" type="text" class="form-control"
+                                                                autocomplete="off">
+                                                </div>
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                        <button id="modalAdd_btnAgregar" type="button"
+                                                class="btn btn-dark">Agregar</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Modal agregar al inicio -->
+        <div class="modal fade" id="modalAddFirst" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Agregar al inicio</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <label class="label-form">Enlace:</label>
+                                        <input id="modalAddFirst_txtEnlace" type="text" class="form-control"
+                                                autocomplete="off">
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                        <button id="modalAddFirst_btnAgregar" type="button"
+                                                class="btn btn-dark">Agregar</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+
+        <!-- Modal agregar al final -->
+        <div class="modal fade" id="modalAddLast" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Agregar al final</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <label class="label-form">Enlace:</label>
+                                        <input id="modalAddLast_txtEnlace" type="text" class="form-control"
+                                                autocomplete="off">
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                        <button id="modalAddLast_btnAgregar" type="button"
+                                                class="btn btn-dark">Agregar</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Modal eliminar con posición -->
+        <div class="modal fade" id="modalRemove" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Eliminar con posición</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <label class="label-form">Posición:</label>
+                                        <input id="modalRemove_txtPosicion" type="number" name="" id=""
+                                                class="form-control" autocomplete="off">
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                        <button id="modalRemove_btnEliminar" type="button"
+                                                class="btn btn-danger">Eliminar</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Modal eliminar al inicio -->
+        <div class="modal fade" id="modalRemoveFirst" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Eliminar al inicio</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        ¿Estás seguro de eliminar la primera canción?
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                        <button id="modalRemoveFirst_btnEliminar" type="button"
+                                                class="btn btn-danger">Eliminar</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Modal eliminar al final -->
+        <div class="modal fade" id="modalRemoveLast" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Eliminar al final</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        ¿Estás seguro de eliminar la última canción?
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                        <button id="modalRemoveLast_btnEliminar" type="button"
+                                                class="btn btn-danger">Eliminar</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Modal Reemplazar en posición -->
+        <div class="modal fade" id="modalSet" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Colocar en posición</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="row">
+                                                <div class="col-3">
+                                                        <label class="label-form">Posición:</label>
+                                                        <input type="number" id="modalSet_txtPosicion"
+                                                                class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-9">
+                                                        <label class="label-form">Enlace:</label>
+                                                        <input id="modalSet_txtEnlace" type="text" class="form-control"
+                                                                autocomplete="off">
+                                                </div>
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cerrar</button>
+                                        <button id="modalSet_btnEstablecer" type="button"
+                                                class="btn btn-dark">Establecer</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Toast/alert para mostrar errores -->
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1056">
+                <div id="toastError" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="alert alert-danger m-0" role="alert">
+                                <span id="txtError"></span>
+                                <button type="button" class="btn-close float-end" data-bs-dismiss="toast"></button>
+                        </div>
+                </div>
+        </div>
+
+        <script src="../bootstrap/bootstrap.bundle.js"></script>
+        <script src="../js/Cancion.js"></script>
+        <script src="../js/Nodo.js"></script>
+        <script src="../js/ListaCircular.js"></script>
+        <script src="../js/mainCircular.js"></script>
+</body>
+
+</html>

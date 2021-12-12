@@ -5,155 +5,133 @@ class ListaCircular {
     }
 
     add(pos, info) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
-        } else {
-            if (pos == 0) {
-                this.addFirst(info);
-            } else if (pos == this.tamaño) {
-                this.addLast(info);
-            } else if (pos > 0 && pos < this.tamaño) {
-                let nuevo = new Nodo(info);
-                let aux = this.origen;
-                for (let i = 0; i < pos - 1; i++) {
-                    aux = aux.siguiente;
-                }
-                let actual = aux.siguiente;
-                aux.siguiente = nuevo;
-                nuevo.siguiente = actual;
-                this.tamaño++;
+        if (pos == 0) {
+            this.addFirst(info);
+        } else if (pos == this.tamaño) {
+            this.addLast(info);
+        } else if (pos > 0 && pos < this.tamaño) {
+            let nuevo = new Nodo(info);
+
+            let anterior = this.origen.siguiente;
+            for (let i = 0; i < pos - 1; i++) {
+                anterior = anterior.siguiente;
             }
+            let actual = anterior.siguiente;
+
+            anterior.siguiente = nuevo;
+            nuevo.siguiente = actual;
+
+            this.tamaño++;
+        } else {
+            throw new Error("Fuera del rango");
         }
     }
 
     addFirst(info) {
-        let nuevo = new Nodo(info);
-        if (this.origen == null) {
-            this.origen = nuevo;
+        if (this.isEmpty()) {
+            this.origen = new Nodo(info);
             this.origen.siguiente = this.origen;
         } else {
-            let aux = this.origen;
-            while (aux.siguiente != this.origen) {
-                aux = aux.siguiente;
-            }
-            aux.siguiente = nuevo;
-            nuevo.siguiente = this.origen;
+            let nuevo = new Nodo(info);
+
+            nuevo.siguiente = this.origen.siguiente;
+            this.origen.siguiente = nuevo;
         }
-        this.origen = nuevo;
         this.tamaño++;
     }
 
     addLast(info) {
-        let nuevo = new Nodo(info);
         if (this.isEmpty()) {
-            this.addFirst(info);
+            this.origen = new Nodo(info);
+            this.origen.siguiente = this.origen;
         } else {
-            let aux = this.origen.siguiente;
-            while (aux.siguiente != this.origen) {
-                aux = aux.siguiente;
-            }
-            aux.siguiente = nuevo;
-            nuevo.siguiente = this.origen;
-            this.tamaño++;
-        }
+            let nuevo = new Nodo(info);
 
+            nuevo.siguiente = this.origen.siguiente;
+            this.origen.siguiente = nuevo;
+
+            this.origen = nuevo;
+        }
+        this.tamaño++;
     }
 
     remove(pos) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
-        } else {
-            if (pos > (this.tamaño - 1) || pos < 0) {
-                throw new Error("Fuera del rango");
-            } else {
-                if (pos == 0) {
-                    this.removeFirst();
-                } else if (pos == this.tamaño - 1) {
-                    this.removeLast();
-                } else if (pos > 0 && pos < (this.tamaño - 1)) {
-                    let aux = this.origen;
-                    for (let i = 0; i < pos - 1; i++) {
-                        aux = aux.siguiente;
-                    }
-                    aux.siguiente = aux.siguiente.siguiente;
-                    this.tamaño--;
-                }
+        if (pos == 0) {
+            this.removeFirst();
+        } else if (pos == this.tamaño - 1) {
+            this.removeLast();
+        } else if (pos > 0 && pos < this.tamaño) {
+            let anterior = this.origen.siguiente;
+            for (let i = 0; i < pos - 1; i++) {
+                anterior = anterior.siguiente;
             }
+            anterior.siguiente = anterior.siguiente.siguiente;
+            this.tamaño--;
+        } else {
+            throw new Error("Fuera del rango");
         }
     }
 
     removeFirst() {
         if (this.isEmpty()) {
-            throw new Error("Lista vacia");
+            throw new Error("Lista vacía");
         } else {
-            let aux = this.origen;
-            while (aux.siguiente != this.origen) {
-                aux = aux.siguiente;
+            if (this.tamaño == 1) {
+                this.origen = null;
+            } else {
+                this.origen.siguiente = this.origen.siguiente.siguiente;
             }
-            let eliminar = this.origen;
-            this.origen = eliminar.siguiente;
-            eliminar.siguiente = null;
-            eliminar = null;
-            aux.siguiente = this.origen;
             this.tamaño--;
         }
     }
 
     removeLast() {
         if (this.isEmpty()) {
-            throw new Error("Lista vacia");
+            throw new Error("Lista vacía");
         } else {
-            let aux = this.origen.siguiente;
-            while (aux.siguiente.siguiente != this.origen) {
-                aux = aux.siguiente;
+            if (this.tamaño == 1) {
+                this.origen = null;
+            } else {
+                let anterior = this.origen.siguiente;
+                while (anterior.siguiente != this.origen) {
+                    anterior = anterior.siguiente;
+                }
+                anterior.siguiente = this.origen.siguiente;
+                this.origen = anterior;
             }
-            let eliminar = aux.siguiente;
-            aux.siguiente = this.origen;
-            eliminar.siguiente = null;
-            eliminar = null;
             this.tamaño--;
         }
     }
 
     set(pos, info) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
+        if (this.isEmpty()) {
+            throw new Error("Lista vacía");
         } else {
-            if (pos > (this.tamaño - 1) || pos < 0) {
-                throw new Error("Fuera del rango");
-            } else {
-                if (pos == 0) {
-                    this.origen.info = info;
-                } else if (pos > 0 && pos <= this.tamaño) {
-                    let aux = this.origen;
-                    let posicion = 0;
-                    while (posicion != pos && posicion != (this.tamaño - 1)) {
-                        aux = aux.siguiente;
-                        posicion++;
-                    }
-                    aux.info = info;
+            if (pos >= 0 && pos < this.tamaño) {
+                let aux = this.origen.siguiente;
+                for (let i = 0; i < pos; i++) {
+                    aux = aux.siguiente;
                 }
+                aux.info = info;
+            } else {
+                throw new Error("Fuera del rango");
             }
         }
     }
 
     get(pos) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
+        if (this.isEmpty()) {
+            throw new Error("Lista vacía");
         } else {
-            let consulta = null;
-            if (pos == 0) {
-                consulta = this.origen;
-            } else if (pos > 0 && pos <= this.tamaño) {
-                let aux = this.origen;
-                let posicion = 0;
-                while (posicion != pos && posicion != (this.tamaño - 1)) {
+            if (pos >= 0 && pos < this.tamaño) {
+                let aux = this.origen.siguiente;
+                for (let i = 0; i < pos; i++) {
                     aux = aux.siguiente;
-                    posicion++;
                 }
-                consulta = aux;
+                return aux.info;
+            } else {
+                throw new Error("Fuera del rango");
             }
-            return consulta;
         }
     }
 
@@ -166,18 +144,18 @@ class ListaCircular {
     }
 
     iterator() {
-        return this.origen;
+        return this.isEmpty() ? null : this.origen.siguiente;
     }
 
     print() {
         if (this.isEmpty()) {
-            console.log("Lista vacia");
+            throw new Error("Lista vacía");
         } else {
-            let aux = this.origen;
+            let i = this.origen.siguiente
             do {
-                console.log(aux.info);
-                aux = aux.siguiente;
-            } while (aux != this.origen);
+                console.log(i.info);
+                i = i.siguiente;
+            } while (i != this.origen.siguiente)
         }
     }
 }

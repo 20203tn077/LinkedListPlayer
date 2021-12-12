@@ -1,18 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="./bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="./css/util.css" rel="stylesheet">
+    <title>Reproductor de Música!</title>
 </head>
-<body>
 
-    <script src="./js/Cancion.js"></script>
-    <script src="./js/Nodo.js"></script>
-    <script src="./js/ListaSimple.js"></script>
-    <script src="./js/ListaDoble.js"></script>
-    <script src="./js/ListaCircular.js"></script>
-    <script src="./js/main.js"></script>
+<body>
+    <h1 class="text-white mt-5 text-center">REPRODUCTOR CON LISTA ENLAZADA</h1>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-6 px-5">
+                <p class="mb-5 fs-5 text-white">
+                    Este proyecto consiste en un reproductor de música basado en listas enlazadas. <br>
+                    El proyecto implementa un reproductor embebido de youtube, el cual es alimentado con los enlaces de
+                    videos que se almacenan en las listas enlazadas. <br>
+                    El reproductor funciona como un iterador de la lista enlazada, la forma en que el reproductor puede
+                    recorrer la lista dependerá del tipo de lista enlazada que sea (simple, doble o circular). <br>
+                    Además de los controles para recorrer la lista, se cuentan con opciones para modificar la misma,
+                    correspondientes a los métodos con los que cuenta una lista enlazada.
+                </p>
+            </div>
+            <div class="col-6 px-5">
+                <div class="d-grid gap-3">
+                    <div>
+                        <h5 class="text-white">Opciones:</h5>
+                        <div class="btn-group-vertical">
+                            <a class="btn btn-dark border-dark fs-5" href="./vistas/simple.html">Reproductor con lista
+                                enlazada simple</a>
+                            <a class="btn btn-dark border-dark fs-5" href="./vistas/doble.html">Reproductor con lista
+                                doblemente enlazada</a>
+                            <a class="btn btn-dark border-dark fs-5" href="./vistas/circular.html">Reproductor con lista
+                                circular</a>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="text-white">Elaborado por:</h5>
+                        <ul>
+                            <li class="fs-5 text-white">Ricardo Cárdenas Guevara</li>
+                            <li class="fs-5 text-white">Nathaly Escalona Ruiz</li>
+                            <li class="fs-5 text-white">Omar Morales Demetrio</li>
+                            <li class="fs-5 text-white">Bethbiray Dolores Romero</li>
+                            <li class="fs-5 text-white">Araceli García Díaz</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./bootstrap/bootstrap.bundle.js"></script>
 </body>
+
 </html>

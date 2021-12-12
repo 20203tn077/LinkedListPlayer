@@ -6,40 +6,40 @@ class ListaDoble {
     }
 
     add(pos, info) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
-        } else {
-            if (pos == 0) {
-                this.addFirst(info);
-            } else if (pos == this.tamaño) {
-                this.addLast(info);
-            } else if (pos > 0 && pos < this.tamaño) {
-                let nuevo = new Nodo(info);
-                let count = 1;
-                let aux = this.origen;
-                while (count != pos) {
-                    aux = aux.siguiente;
-                    count++;
-                }
-                let despues = aux.siguiente;
-                aux.siguiente = nuevo;
-                nuevo.siguiente = despues;
-                nuevo.anterior = aux;
-                despues.siguiente = nuevo;
-                this.tamaño++;
+        if (pos == 0) {
+            this.addFirst(info);
+        } else if (pos == this.tamaño) {
+            this.addLast(info);
+        } else if (pos > 0 && pos < this.tamaño) {
+            let nuevo = new Nodo(info);
+
+            let actual = this.origen;
+            for (let i = 0; i < pos; i++) {
+                actual = actual.siguiente;
             }
+            let anterior = actual.anterior;
+
+            anterior.siguiente = nuevo
+            nuevo.anterior = anterior;
+
+            nuevo.siguiente = actual;
+            actual.anterior = nuevo;
+
+            this.tamaño++;
+        } else {
+            throw new Error("Fuera del rango");
         }
     }
 
     addFirst(info) {
         let nuevo = new Nodo(info);
-        if (this.tamaño == 0) {
+        if (this.isEmpty()) {
             this.origen = nuevo;
             this.final = nuevo;
         } else {
-            let aux = this.origen;
-            aux.anterior = nuevo;
-            nuevo.siguiente = aux;
+            nuevo.siguiente = this.origen;
+            this.origen.anterior = nuevo;
+
             this.origen = nuevo;
         }
         this.tamaño++;
@@ -47,53 +47,51 @@ class ListaDoble {
 
     addLast(info) {
         let nuevo = new Nodo(info);
-        if (this.tamaño == 0) {
+        if (this.isEmpty()) {
             this.origen = nuevo;
             this.final = nuevo;
         } else {
-            let aux = this.origen;
-            aux.siguiente = nuevo;
-            nuevo.anterior = aux;
+            this.final.siguiente = nuevo;
+            nuevo.anterior = this.final;
+
             this.final = nuevo;
         }
         this.tamaño++;
     }
 
     remove(pos) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
-        } else {
-            if (pos == 0) {
-                this.removeFirst();
-            } else if (pos == this.tamaño - 1) {
-                this.removeLast();
-            } else if (pos > 0 && pos < this.tamaño) {
-                let aux = this.origen;
-                let count = 0;
-                while (count != pos) {
-                    aux = aux.siguiente;
-                    count++;
-                }
-                aux.anterior.siguiente = aux.siguiente;
-                aux.siguiente.anterior = aux.anterior;
-                aux = null;
-                this.tamaño--;
+        if (pos == 0) {
+            this.removeFirst();
+        } else if (pos == this.tamaño - 1) {
+            this.removeLast();
+        } else if (pos > 0 && pos < this.tamaño - 1) {
+            let actual = this.origen;
+            for (let i = 0; i < pos; i++) {
+                actual = actual.siguiente;
             }
+            let anterior = actual.anterior;
+            let siguiente = actual.siguiente;
+
+            anterior.siguiente = siguiente;
+            siguiente.anterior = anterior;
+
+            this.tamaño--;
+        } else {
+            throw new Error("Fuera del rango");
         }
     }
 
     removeFirst() {
         if (this.isEmpty()) {
-            throw new Error("Lista vacia");
+            throw new Error("Lista vacía");
         } else {
             if (this.tamaño == 1) {
-                this.removeFirst();
+                this.origen = null;
+                this.final = null;
             } else {
-
-                let aux = this.origen;
-                this.origen = aux.siguiente;
-                aux.siguiente = null;
-                aux = null;
+                let siguiente = this.origen.siguiente;
+                siguiente.anterior = null;
+                this.origen = siguiente;
             }
             this.tamaño--;
         }
@@ -101,72 +99,49 @@ class ListaDoble {
 
     removeLast() {
         if (this.isEmpty()) {
-            throw new Error("Lista vacia");
+            throw new Error("Lista vacía");
         } else {
             if (this.tamaño == 1) {
-                this.removeFirst();
+                this.origen = null;
+                this.final = null;
             } else {
-                let aux = this.final;
-                this.final = aux.anterior;
-                this.final.siguiente = null;
-                aux = null;
-                this.tamaño--;
+                let anterior = this.final.anterior;
+                anterior.siguiente = null;
+                this.final = anterior;
             }
+            this.tamaño--;
         }
     }
 
     set(pos, info) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
+        if (this.isEmpty()) {
+            throw new Error("Lista vacía");
         } else {
-            let nuevo = new Nodo(info);
-            if (this.isEmpty()) {
-                throw new Error("Lista vacia");
-            } else {
-                if (pos == 0) {
-                    let aux = this.origen;
-                    nuevo.siguiente = aux.siguiente;
-                    this.origen = nuevo;
-                    aux.siguiente = null;
-                    aux = null;
-                } else if (pos > 0 && pos < this.tamaño) {
-                    let aux = this.origen;
-                    let count = 0;
-                    while (count != pos) {
-                        aux = aux.siguiente;
-                        count++;
-                    }
-                    nuevo.anterior = aux.anterior;
-                    nuevo.siguiente = aux.siguiente;
-                    aux.anterior.siguiente = nuevo;
-                    if (aux.siguiente != null) {
-                        aux.siguiente.anterior = nuevo;
-                    }
-                    aux.anterior = null;
-                    aux.siguiente = null;
-                    aux = null;
+            if (pos >= 0 && pos < this.tamaño) {
+                let aux = this.origen;
+                for (let i = 0; i < pos; i++) {
+                    aux = aux.siguiente;
                 }
+                aux.info = info;
+            } else {
+                throw new Error("Fuera del rango");
             }
         }
     }
 
     get(pos) {
-        if (pos > (this.tamaño - 1) || pos < 0) {
-            throw new Error("Fuera del rango");
+        if (this.isEmpty()) {
+            throw new Error("Lista vacía");
         } else {
-            let consulta = null;
-            if (pos == 0) {
-                consulta = this.origen;
-            } else if (pos > 0 && pos <= this.tamaño) {
+            if (pos >= 0 && pos < this.tamaño) {
                 let aux = this.origen;
-                let posicion = 0;
-                while (posicion != pos) {
+                for (let i = 0; i < pos; i++) {
                     aux = aux.siguiente;
-                    posicion++;
                 }
-                consulta = aux;
+                return aux.info;
+            } else {
+                throw new Error("Fuera del rango");
             }
-            return consulta;
         }
     }
 
