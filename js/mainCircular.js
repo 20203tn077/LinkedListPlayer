@@ -23,6 +23,7 @@ function onYouTubeIframeAPIReady() {
     });
 
     function onReady(event) {
+        document.getElementById('reproductor').style.visibility = 'hidden';
         modalPrimeraCancion_txtEnlace.disabled = false;
     }
 }
@@ -131,11 +132,13 @@ function actualizar() {
                 nodoCancionActual = lista.iterator();
                 reproducir(0);
                 listaTerminada = false;
+                btnReproducir.disabled = false;
             }
 
             if (nodoCancionActual != null && nodoCancionActual.siguiente != null) {
                 reproducirSiguiente();
                 listaTerminada = false;
+                btnReproducir.disabled = false;
             }
 
             icoReproducir.href.baseVal = '../ico/feather-sprite.svg#play';
@@ -230,6 +233,7 @@ modalPrimeraCancion_btnAgregar.onclick = () => {
         reproductor.addEventListener('onStateChange', 'onStateChange');
 
         reproducir(0);
+        document.getElementById('reproductor').style.visibility = 'visible'
 
         listaTerminada = false;
         nodoCancionActual = lista.iterator();
