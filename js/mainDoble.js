@@ -127,15 +127,13 @@ function actualizar() {
         if (listaTerminada) {
             if (nodoCancionActual == null) {
                 nodoCancionActual = lista.firstIterator();
-                reproducir(0);
                 listaTerminada = false;
-                btnReproducir.disabled = false;
+                reproducir(0);
             }
 
             if (nodoCancionActual != null && nodoCancionActual.siguiente != null) {
-                reproducirSiguiente();
                 listaTerminada = false;
-                btnReproducir.disabled = false;
+                reproducirSiguiente();
             }
 
             icoReproducir.href.baseVal = '../ico/feather-sprite.svg#play';
