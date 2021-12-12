@@ -15,7 +15,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var reproductor;
 function onYouTubeIframeAPIReady() {
     reproductor = new YT.Player('reproductor', {
-        videoId: 'dQw4w9WgXcQ',
+        videoId: 'dQw4w9WgXcQ asd',
         playerVars: { 'controls': 0 },
         events: {
             'onReady': onReady
@@ -23,7 +23,6 @@ function onYouTubeIframeAPIReady() {
     });
 
     function onReady(event) {
-        document.getElementById('reproductor').style.visibility = 'hidden';
         modalPrimeraCancion_txtEnlace.disabled = false;
     }
 }
@@ -129,15 +128,13 @@ function actualizar() {
                 nodoCancionActual = lista.firstIterator();
                 listaTerminada = false;
                 reproducir(0);
-            }
-
-            if (nodoCancionActual != null && nodoCancionActual.siguiente != null) {
+            } else if (nodoCancionActual != null && nodoCancionActual.siguiente != null) {
                 listaTerminada = false;
                 reproducirSiguiente();
+            } else {
+                icoReproducir.href.baseVal = '../ico/feather-sprite.svg#play';
+                btnReproducir.disabled = true;
             }
-
-            icoReproducir.href.baseVal = '../ico/feather-sprite.svg#play';
-            btnReproducir.disabled = true;
         } else {
             btnReproducir.disabled = false;
         }
@@ -228,12 +225,12 @@ modalPrimeraCancion_btnAgregar.onclick = () => {
         reproductor.addEventListener('onStateChange', 'onStateChange');
 
         reproducir(0);
-        document.getElementById('reproductor').style.visibility = 'visible'
 
         listaTerminada = false;
         nodoCancionActual = lista.firstIterator();
         actualizar();
         modalPrimeraCancion.hide();
+        document.getElementById('reproductor').style.visibility = 'visible';
     } catch (error) {
         mostrarError(error.message);
     }
