@@ -113,6 +113,7 @@ function actualizar() {
         btnRemove.disabled = true;
         btnRemoveFirst.disabled = true;
         btnRemoveLast.disabled = true;
+        btnSet.disabled = true;
 
         icoReproducir.href.baseVal = '../ico/feather-sprite.svg#play';
         btnReproducir.disabled = true;
@@ -121,6 +122,7 @@ function actualizar() {
         btnRemove.disabled = false;
         btnRemoveFirst.disabled = false;
         btnRemoveLast.disabled = false;
+        btnSet.disabled = false;
 
         if (nodoCancionActual != null) {
             btnSiguiente.disabled = nodoCancionActual.siguiente == null;
